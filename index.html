@@ -457,9 +457,27 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
           <input id="f-phone" type="tel" autocomplete="tel" placeholder="01XXXXXXXXX">
         </label>
       </div>
-      <label for="f-address">ঠিকানা
-        <textarea id="f-address" autocomplete="street-address" placeholder="বাসা, রোড, এলাকা, শহর"></textarea>
-      </label>
+      <div class="row two">
+        <label for="f-house">বাসা নং
+          <input id="f-house" type="text" placeholder="বাসা বা হোল্ডিং নম্বর">
+        </label>
+        <label for="f-area">পাড়া / মহল্লা
+          <input id="f-area" type="text" placeholder="পাড়া বা মহল্লার নাম">
+        </label>
+      </div>
+      <div class="row two">
+        <label for="f-village">গ্রাম
+          <input id="f-village" type="text" placeholder="গ্রামের নাম">
+        </label>
+        <label for="f-upazila">উপজেলা
+          <input id="f-upazila" type="text" placeholder="উপজেলার নাম">
+        </label>
+      </div>
+      <div class="row two">
+        <label for="f-district">জেলা
+          <input id="f-district" type="text" placeholder="জেলার নাম">
+        </label>
+      </div>
       <label for="f-note">অতিরিক্ত কিছু বলতে চাইলে
         <input id="f-note" type="text" placeholder="যেমন: সন্ধ্যার পর আসবেন">
       </label>
@@ -564,7 +582,11 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
   var sizeSel = document.getElementById("f-size");
   var nameIn = document.getElementById("f-name");
   var phoneIn = document.getElementById("f-phone");
-  var addrIn = document.getElementById("f-address");
+  var houseIn = document.getElementById("f-house");
+  var areaIn = document.getElementById("f-area");
+  var villageIn = document.getElementById("f-village");
+  var upazilaIn = document.getElementById("f-upazila");
+  var districtIn = document.getElementById("f-district");
   var noteIn = document.getElementById("f-note");
   var lineEl = document.getElementById("f-line");
   var totalEl = document.getElementById("f-total");
@@ -592,11 +614,18 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
       size: p.hasSize ? sizeSel.value : "",
       customer: {
         name: nameIn.value.trim(), phone: phoneIn.value.trim(),
-        address: addrIn.value.trim(), note: noteIn.value.trim()
+        address: [
+          houseIn.value.trim() ? "বাসা নং: " + houseIn.value.trim() : "",
+          areaIn.value.trim() ? "পাড়া/মহল্লা: " + areaIn.value.trim() : "",
+          villageIn.value.trim() ? "গ্রাম: " + villageIn.value.trim() : "",
+          upazilaIn.value.trim() ? "উপজেলা: " + upazilaIn.value.trim() : "",
+          districtIn.value.trim() ? "জেলা: " + districtIn.value.trim() : ""
+        ].filter(function (s) { return s !== ""; }).join(", "),
+        note: noteIn.value.trim()
       }
     }));
   }
-  [sel, qtyIn, sizeSel, nameIn, phoneIn, addrIn, noteIn].forEach(function (el) {
+  [sel, qtyIn, sizeSel, nameIn, phoneIn, houseIn, areaIn, villageIn, upazilaIn, districtIn, noteIn].forEach(function (el) {
     el.addEventListener("input", formRender);
     el.addEventListener("change", formRender);
   });
