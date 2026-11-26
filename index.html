@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>শামিমস স্টোর</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: bazaar signboard. Loud red hero with a big painted title, then paper-white product cards with hard offset shadows, then a plain order form. */
+:root {
+  color-scheme: light;
+  --bg: #FFF4C2;
+  --paper: #FFFFFF;
+  --ink: #1C1A2E;
+  --muted: #5B5870;
+  --hero: #C81E34;
+  --yellow: #FFC914;
+  --green: #0E8A55;
+  --on-green: #FFFFFF;
+  --field: #FFFBE8;
+  --shadow: #1C1A2E;
+  --font-display: "Baloo Da 2", "Hind Siliguri", "Noto Sans Bengali", sans-serif;
+  --font-body: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16131F; --paper: #221E30; --ink: #FFF4C2; --muted: #B9B3CC;
+    --field: #1A1726; --shadow: #000000; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16131F; --paper: #221E30; --ink: #FFF4C2; --muted: #B9B3CC;
+  --field: #1A1726; --shadow: #000000; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.wrap {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Hero */
+.hero {
+  background: var(--hero);
+  color: #fff;
+  margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+  padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
+  padding-bottom: 3rem;
+  border-bottom: 4px solid var(--ink);
+}
+.hero .wrap { display: grid; gap: 1.1rem; justify-items: start; }
+.kicker {
+  font-weight: 600; letter-spacing: .02em; background: #fff; color: #1C1A2E;
+  padding: .15rem .8rem; border-radius: 99px; font-size: .95rem;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.4rem, 14vw, 8.5rem);
+  line-height: 1.05;
+  margin: 0;
+  color: var(--yellow);
+  text-shadow: 4px 4px 0 #1C1A2E;
+  text-wrap: balance;
+}
+.hero p.lead { margin: 0; font-size: clamp(1.1rem, 3.4vw, 1.5rem); max-width: 34ch; font-weight: 500; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; margin-top: .4rem; }
+.hero .num { font-weight: 600; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  font: inherit; font-weight: 700; font-size: 1.05rem;
+  padding: .7rem 1.3rem;
+  border: 3px solid #1C1A2E; border-radius: 10px;
+  text-decoration: none; cursor: pointer;
+  box-shadow: 4px 4px 0 #1C1A2E;
+  transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1C1A2E; }
+.btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #1C1A2E; }
+.btn-order { background: var(--green); color: var(--on-green); width: 100%; }
+.btn-yellow { background: var(--yellow); color: #1C1A2E; }
+.btn-white { background: #fff; color: #1C1A2E; }
+
+/* Sections */
+section { padding-block: 3rem; }
+h2 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.9rem, 6vw, 2.8rem); line-height: 1.2; margin: 0 0 .4rem;
+  text-wrap: balance;
+}
+.sub { color: var(--muted); margin: 0 0 2rem; max-width: 52ch; }
+
+/* Products */
+.grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+.card {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--shadow);
+  display: flex; flex-direction: column;
+  min-width: 0; overflow: hidden;
+}
+.tile { position: relative; border-bottom: 3px solid var(--ink); }
+.tile svg { display: block; width: 100%; height: auto; }
+.badge {
+  position: absolute; top: 12px; right: 12px;
+  background: var(--yellow); color: #1C1A2E;
+  border: 2px solid #1C1A2E; border-radius: 99px;
+  padding: .05rem .75rem; font-weight: 700; font-size: .9rem;
+  transform: rotate(4deg);
+}
+.card-body { padding: 1.2rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: .8rem; flex: 1; }
+.card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; line-height: 1.25; margin: 0; }
+.card p { margin: 0; color: var(--muted); }
+.specs { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; font-size: .96rem; }
+.specs li { display: flex; gap: .6rem; }
+.specs li::before { content: "✓"; color: var(--green); font-weight: 700; }
+.price-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: auto; padding-top: .4rem; }
+.price { font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1; }
+.price small { font-family: var(--font-body); font-weight: 500; font-size: .95rem; color: var(--muted); }
+.controls { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+.qty { display: inline-flex; align-items: center; border: 3px solid var(--ink); border-radius: 10px; overflow: hidden; background: var(--field); }
+.qty button {
+  font: inherit; font-weight: 700; font-size: 1.3rem; width: 2.6rem; height: 2.6rem;
+  border: 0; background: transparent; color: var(--ink); cursor: pointer;
+}
+.qty button:hover:not(:disabled) { background: var(--yellow); color: #1C1A2E; }
+.qty button:disabled { opacity: .35; cursor: not-allowed; }
+.qty output { min-width: 3.4rem; text-align: center; font-weight: 700; font-size: 1.1rem; }
+.total-line { font-weight: 600; }
+.total-line b { font-family: var(--font-display); font-size: 1.15rem; }
+
+/* Inputs */
+label { display: grid; gap: .3rem; font-weight: 600; }
+input, select, textarea {
+  font: inherit; color: var(--ink); background: var(--field);
+  border: 3px solid var(--ink); border-radius: 10px; padding: .6rem .8rem;
+  width: 100%; min-width: 0;
+}
+textarea { resize: vertical; min-height: 5.5rem; }
+.size-pick { display: grid; gap: .3rem; font-weight: 600; font-size: .95rem; }
+.size-pick select { padding: .4rem .6rem; width: auto; }
+
+/* Steps */
+.steps { display: grid; gap: 18px; grid-template-columns: 1fr; list-style: none; margin: 0; padding: 0; counter-reset: s; }
+@media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.steps li {
+  counter-increment: s; background: var(--paper); border: 3px solid var(--ink); border-radius: 14px;
+  padding: 1.1rem 1.2rem; display: grid; gap: .3rem; min-width: 0;
+}
+.steps li::before {
+  content: counter(s, bengali); font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; line-height: 1; color: var(--hero);
+}
+.steps b { font-size: 1.15rem; }
+.steps span { color: var(--muted); }
+
+/* Order form */
+.order-box {
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--shadow); padding: 1.4rem; display: grid; gap: 1.1rem;
+}
+.row { display: grid; gap: 1.1rem; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .row.two { grid-template-columns: 1fr 1fr; } }
+.summary {
+  background: var(--yellow); color: #1C1A2E; border: 3px solid #1C1A2E; border-radius: 10px;
+  padding: .9rem 1.1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-weight: 600;
+}
+.summary b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; }
+.hint { color: var(--muted); font-size: .95rem; margin: 0; }
+
+footer { background: var(--ink); color: var(--bg); padding-block: 2rem; margin-top: 1rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+footer b { font-family: var(--font-display); font-size: 1.4rem; }
+
+@counter-style bengali { system: numeric; symbols: "০" "১" "২" "৩" "৪" "৫" "৬" "৭" "৮" "৯"; }
+
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">হোয়াটসঅ্যাপে সরাসরি অর্ডার</span>
+    <h1>শামিমস স্টোর</h1>
+    <p class="lead">এখানে যা পাওয়া যায়, আর কোথাও পাওয়া যায় না।</p>
+    <div class="hero-actions">
+      <a class="btn btn-yellow" href="#products">পণ্য দেখুন</a>
+      <a class="btn btn-white" href="#order">অর্ডার ফর্ম</a>
+      <span class="num">হোয়াটসঅ্যাপ: +880 1407-688830</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="products">
+  <div class="wrap">
+    <h2>আমাদের পণ্য ও সার্ভিস</h2>
+    <p class="sub">পরিমাণ ঠিক করে "অর্ডার করুন" বাটনে চাপ দিন। অর্ডারের মেসেজ তৈরি অবস্থায় আপনার হোয়াটসঅ্যাপ খুলবে।</p>
+
+    <div class="grid">
+
+      <!-- 1 -->
+      <article class="card" data-name="শামিমের বিচি জোড়া" data-unit="জোড়া" data-price="7200000" data-max="1">
+        <div class="tile" style="background:#3B2A6B">
+          <span class="badge">সীমিত স্টক</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="মখমলের কুশনে সোনালি এক জোড়া গোল বস্তু">
+            <defs>
+              <radialGradient id="gold" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#FFF1A6"/><stop offset=".55" stop-color="#F4B400"/><stop offset="1" stop-color="#B26A00"/>
+              </radialGradient>
+            </defs>
+            <path d="M28 138 Q120 108 212 138 L212 152 Q120 184 28 152Z" fill="#B5233F" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="24" cy="146" r="6" fill="#FFC914" stroke="#1C1A2E" stroke-width="2"/>
+            <circle cx="216" cy="146" r="6" fill="#FFC914" stroke="#1C1A2E" stroke-width="2"/>
+            <circle cx="92" cy="96" r="38" fill="url(#gold)" stroke="#1C1A2E" stroke-width="3"/>
+            <circle cx="150" cy="96" r="38" fill="url(#gold)" stroke="#1C1A2E" stroke-width="3"/>
+            <ellipse cx="78" cy="80" rx="10" ry="6" fill="#fff" opacity=".6" transform="rotate(-30 78 80)"/>
+            <ellipse cx="136" cy="80" rx="10" ry="6" fill="#fff" opacity=".6" transform="rotate(-30 136 80)"/>
+            <g fill="#FFF1A6">
+              <path transform="translate(38 38)" d="M0-10 L2.5-2.5 L10 0 L2.5 2.5 L0 10 L-2.5 2.5 L-10 0 L-2.5-2.5Z"/>
+              <path transform="translate(204 44)" d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z"/>
+              <path transform="translate(121 26)" d="M0-7 L1.8-1.8 L7 0 L1.8 1.8 L0 7 L-1.8 1.8 L-7 0 L-1.8-1.8Z"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>শামিমের বিচি জোড়া</h3>
+          <p>একদম আসল, সোনালি জোড়া। মখমলের কুশনসহ হাতে হাতে দেওয়া হয়। শো-পিস হিসেবেও সেরা।</p>
+          <ul class="specs">
+            <li>স্টকে আছে মাত্র ১ জোড়া</li>
+            <li>প্রথম অর্ডারকারী পাবেন</li>
+            <li>কুশনসহ উপহার প্যাকেজ</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">৭২ লাখ টাকা <small>প্রতি জোড়া</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="পরিমাণ">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <span class="total-line">মোট: <b class="total">৭২,০০,০০০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="card" data-name="শামিমের অক্সফোর্ড জুতা" data-unit="জোড়া" data-price="690" data-max="10" data-size="1">
+        <div class="tile" style="background:#BFE3F2">
+          <span class="badge">সেরা বিক্রি</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="বাদামি অক্সফোর্ড জুতা">
+            <ellipse cx="122" cy="154" rx="104" ry="7" fill="#1C1A2E" opacity=".18"/>
+            <path d="M24 126 L220 126 L220 140 Q220 148 210 148 L38 148 Q24 148 24 136Z" fill="#2B1A12" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="24" y="140" width="40" height="12" rx="3" fill="#1C1A2E"/>
+            <path d="M34 126 L34 62 Q34 54 42 54 L70 54 Q88 92 126 96 L196 102 Q224 106 220 126Z" fill="#8A4A22" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M172 102 Q180 114 174 126" fill="none" stroke="#1C1A2E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M82 68 L97 62 M92 79 L109 72 M104 87 L121 81 M118 93 L134 89" stroke="#F3E3C3" stroke-width="4" stroke-linecap="round"/>
+            <path d="M44 70 Q44 100 50 118" fill="none" stroke="#C07A44" stroke-width="4" stroke-linecap="round"/>
+            <g fill="#1C1A2E"><circle cx="196" cy="114" r="1.8"/><circle cx="204" cy="116" r="1.8"/><circle cx="212" cy="118" r="1.8"/></g>
+            <g fill="#fff">
+              <path transform="translate(190 36)" d="M0-9 L2-2 L9 0 L2 2 L0 9 L-2 2 L-9 0 L-2-2Z"/>
+              <path transform="translate(212 62)" d="M0-6 L1.5-1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5-1.5Z"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>শামিমের অক্সফোর্ড জুতা</h3>
+          <p>অফিস, বিয়ে বা ঈদ, সব জায়গায় মানানসই ক্লাসিক অক্সফোর্ড। লেদারের মতো দেখতে, পায়ে আরামদায়ক।</p>
+          <ul class="specs">
+            <li>সাইজ ৩৮ থেকে ৪৫</li>
+            <li>ফিতাসহ বক্সে সরবরাহ</li>
+            <li>পলিশ করা অবস্থায় হস্তান্তর</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">৬৯০ টাকা <small>প্রতি জোড়া</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="পরিমাণ">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <label class="size-pick">সাইজ
+              <select class="size" id="size-shoe">
+                <option>৩৮</option><option>৩৯</option><option>৪০</option><option selected>৪১</option>
+                <option>৪২</option><option>৪৩</option><option>৪৪</option><option>৪৫</option>
+              </select>
+            </label>
+            <span class="total-line">মোট: <b class="total">৬৯০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="card" data-name="টয়লেট পরিষ্কার সার্ভিস" data-unit="টি টয়লেট" data-price="100" data-max="20">
+        <div class="tile" style="background:#CDEFD9">
+          <span class="badge">ঝকঝকে</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="ঝকঝকে পরিষ্কার টয়লেট ও ব্রাশ">
+            <ellipse cx="116" cy="168" rx="86" ry="6" fill="#1C1A2E" opacity=".15"/>
+            <rect x="76" y="20" width="84" height="52" rx="8" fill="#fff" stroke="#1C1A2E" stroke-width="3"/>
+            <circle cx="118" cy="34" r="6" fill="#CFD8DC" stroke="#1C1A2E" stroke-width="2.5"/>
+            <path d="M66 86 H170 Q170 134 150 146 L150 156 H86 L86 146 Q66 134 66 86Z" fill="#fff" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <ellipse cx="118" cy="86" rx="56" ry="13" fill="#E8F1F5" stroke="#1C1A2E" stroke-width="3"/>
+            <ellipse cx="118" cy="87" rx="38" ry="7" fill="#6EC6E8"/>
+            <rect x="92" y="154" width="52" height="12" rx="3" fill="#fff" stroke="#1C1A2E" stroke-width="3"/>
+            <path d="M204 56 L204 148" stroke="#1C1A2E" stroke-width="6" stroke-linecap="round"/>
+            <rect x="193" y="142" width="22" height="26" rx="8" fill="#E5533D" stroke="#1C1A2E" stroke-width="3"/>
+            <g fill="#fff" stroke="#1C1A2E" stroke-width="2">
+              <circle cx="40" cy="60" r="9"/><circle cx="58" cy="44" r="5"/><circle cx="34" cy="100" r="6"/>
+            </g>
+            <g fill="#FFC914" stroke="#1C1A2E" stroke-width="1.5">
+              <path transform="translate(46 128)" d="M0-10 L2.5-2.5 L10 0 L2.5 2.5 L0 10 L-2.5 2.5 L-10 0 L-2.5-2.5Z"/>
+              <path transform="translate(178 30)" d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>টয়লেট পরিষ্কার সার্ভিস</h3>
+          <p>ব্রাশ, পানি আর ধৈর্য নিয়ে আমরা আসি। কাজ শেষে টয়লেট চকচকে।</p>
+          <ul class="specs">
+            <li>প্রতি টয়লেটে ১০০ টাকা</li>
+            <li>নিজস্ব ব্রাশসহ আসা হয়</li>
+            <li>কাজ শেষে ফিনিশিং চেক</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">১০০ টাকা <small>প্রতি টয়লেট</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="পরিমাণ">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <span class="total-line">মোট: <b class="total">১০০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="card" data-name="এক ঘণ্টা কামলা" data-unit="ঘণ্টা" data-price="50" data-max="12">
+        <div class="tile" style="background:#FFD9B0">
+          <span class="badge">সস্তা</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="হেলমেট পরা কামলা কোদাল হাতে, পাশে ঘড়ি">
+            <ellipse cx="96" cy="172" rx="80" ry="6" fill="#1C1A2E" opacity=".15"/>
+            <rect x="74" y="132" width="16" height="32" rx="4" fill="#2B3A67" stroke="#1C1A2E" stroke-width="3"/>
+            <rect x="100" y="132" width="16" height="32" rx="4" fill="#2B3A67" stroke="#1C1A2E" stroke-width="3"/>
+            <ellipse cx="80" cy="166" rx="13" ry="6" fill="#1C1A2E"/>
+            <ellipse cx="108" cy="166" rx="13" ry="6" fill="#1C1A2E"/>
+            <path d="M142 64 L136 148" stroke="#7B3F1D" stroke-width="6" stroke-linecap="round"/>
+            <path d="M122 148 L150 148 Q148 170 136 172 Q124 170 122 148Z" fill="#9AA5B1" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M118 98 L140 112" stroke="#0E8A55" stroke-width="12" stroke-linecap="round"/>
+            <path d="M72 98 L54 124" stroke="#0E8A55" stroke-width="12" stroke-linecap="round"/>
+            <circle cx="142" cy="113" r="6" fill="#C68642" stroke="#1C1A2E" stroke-width="2"/>
+            <circle cx="53" cy="126" r="6" fill="#C68642" stroke="#1C1A2E" stroke-width="2"/>
+            <rect x="70" y="84" width="50" height="52" rx="14" fill="#0E8A55" stroke="#1C1A2E" stroke-width="3"/>
+            <circle cx="95" cy="62" r="21" fill="#C68642" stroke="#1C1A2E" stroke-width="3"/>
+            <path d="M73 58 Q95 20 117 58Z" fill="#FFC914" stroke="#1C1A2E" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="67" y="56" width="56" height="7" rx="3.5" fill="#E0A800" stroke="#1C1A2E" stroke-width="2.5"/>
+            <circle cx="88" cy="69" r="2.4" fill="#1C1A2E"/><circle cx="102" cy="69" r="2.4" fill="#1C1A2E"/>
+            <path d="M88 77 Q95 83 102 77" fill="none" stroke="#1C1A2E" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="192" cy="48" r="26" fill="#fff" stroke="#1C1A2E" stroke-width="3"/>
+            <g stroke="#1C1A2E" stroke-width="2" stroke-linecap="round"><path d="M192 26 V30 M192 66 V70 M170 48 H174 M210 48 H214"/></g>
+            <path d="M192 48 L192 33 M192 48 L202 54" stroke="#C81E34" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <circle cx="192" cy="48" r="3" fill="#1C1A2E"/>
+            <text x="192" y="96" text-anchor="middle" font-size="16" font-weight="700" fill="#1C1A2E" style="font-family: 'Hind Siliguri', sans-serif">১ ঘণ্টা</text>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>এক ঘণ্টা কামলা</h3>
+          <p>মাটি কাটা, মালপত্র টানা, ঘর গোছানো। যা বলবেন, এক ঘণ্টা পুরো মন দিয়ে করে দেওয়া হবে।</p>
+          <ul class="specs">
+            <li>ঘণ্টায় ৫০ টাকা</li>
+            <li>ন্যূনতম ১ ঘণ্টা বুকিং</li>
+            <li>সময়মতো হাজির, মাঝপথে ফাঁকি নেই</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">৫০ টাকা <small>প্রতি ঘণ্টা</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="ঘণ্টা">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <span class="total-line">মোট: <b class="total">৫০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>অর্ডার করবেন যেভাবে</h2>
+    <p class="sub">তিন ধাপেই শেষ।</p>
+    <ol class="steps">
+      <li><b>পণ্য বেছে নিন</b><span>পরিমাণ আর সাইজ ঠিক করুন।</span></li>
+      <li><b>অর্ডার বাটনে চাপ দিন</b><span>হোয়াটসঅ্যাপ খুলবে, মেসেজ তৈরি থাকবে।</span></li>
+      <li><b>মেসেজ পাঠান</b><span>আমরা কনফার্ম করে ডেলিভারির সময় জানাবো।</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="order">
+  <div class="wrap">
+    <h2>বিস্তারিত অর্ডার ফর্ম</h2>
+    <p class="sub">নাম আর ঠিকানাসহ পুরো অর্ডার একসাথে পাঠাতে চাইলে এই ফর্ম ব্যবহার করুন।</p>
+    <form class="order-box" id="order-form" novalidate>
+      <div class="row two">
+        <label for="f-product">পণ্য বা সার্ভিস
+          <select id="f-product"></select>
+        </label>
+        <div class="row two">
+          <label for="f-qty">পরিমাণ
+            <input id="f-qty" type="number" min="1" value="1" inputmode="numeric">
+          </label>
+          <label for="f-size" id="f-size-wrap" hidden>জুতার সাইজ
+            <select id="f-size">
+              <option>৩৮</option><option>৩৯</option><option>৪০</option><option selected>৪১</option>
+              <option>৪২</option><option>৪৩</option><option>৪৪</option><option>৪৫</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="row two">
+        <label for="f-name">আপনার নাম
+          <input id="f-name" type="text" autocomplete="name" placeholder="যেমন: রফিক মিয়া">
+        </label>
+        <label for="f-phone">ফোন নম্বর
+          <input id="f-phone" type="tel" autocomplete="tel" placeholder="01XXXXXXXXX">
+        </label>
+      </div>
+      <label for="f-address">ঠিকানা
+        <textarea id="f-address" autocomplete="street-address" placeholder="বাসা, রোড, এলাকা, শহর"></textarea>
+      </label>
+      <label for="f-note">অতিরিক্ত কিছু বলতে চাইলে
+        <input id="f-note" type="text" placeholder="যেমন: সন্ধ্যার পর আসবেন">
+      </label>
+      <div class="summary">
+        <span id="f-line">পণ্য</span>
+        <span>সর্বমোট: <b id="f-total">০</b> টাকা</span>
+      </div>
+      <a class="btn btn-order" id="f-send" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার পাঠান</a>
+      <p class="hint">বাটনে চাপ দিলে হোয়াটসঅ্যাপে মেসেজ তৈরি হয়ে খুলবে। সেখানে "পাঠান" চাপলে অর্ডার আমাদের কাছে যাবে। হোয়াটসঅ্যাপ নম্বর: +880 1407-688830</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>শামিমস স্টোর</b>
+    <span>হোয়াটসঅ্যাপ: +880 1407-688830</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var PHONE = "8801407688830";
+  var DIGITS = "০১২৩৪৫৬৭৮৯";
+
+  function bn(n) {
+    var s;
+    try { s = Number(n).toLocaleString("bn-BD"); } catch (e) { s = String(n); }
+    if (/[0-9]/.test(s)) {
+      s = s.replace(/[0-9]/g, function (d) { return DIGITS[Number(d)]; });
+    }
+    return s;
+  }
+
+  function link(msg) {
+    return "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(msg);
+  }
+
+  function orderMsg(o) {
+    var lines = ["আসসালামু আলাইকুম, আমি শামিমস স্টোর থেকে অর্ডার করতে চাই।", ""];
+    lines.push("পণ্য: " + o.name);
+    lines.push("পরিমাণ: " + bn(o.qty) + " " + o.unit);
+    if (o.size) lines.push("সাইজ: " + o.size);
+    lines.push("মোট দাম: " + bn(o.total) + " টাকা");
+    if (o.customer) {
+      lines.push("");
+      if (o.customer.name) lines.push("নাম: " + o.customer.name);
+      if (o.customer.phone) lines.push("ফোন: " + o.customer.phone);
+      if (o.customer.address) lines.push("ঠিকানা: " + o.customer.address);
+      if (o.customer.note) lines.push("নোট: " + o.customer.note);
+    }
+    lines.push("");
+    lines.push("অনুগ্রহ করে অর্ডারটি কনফার্ম করুন।");
+    return lines.join("\n");
+  }
+
+  var products = [];
+
+  /* Product cards */
+  var cards = document.querySelectorAll(".card");
+  Array.prototype.forEach.call(cards, function (card, i) {
+    var p = {
+      id: i,
+      name: card.getAttribute("data-name"),
+      unit: card.getAttribute("data-unit"),
+      price: Number(card.getAttribute("data-price")),
+      max: Number(card.getAttribute("data-max")),
+      hasSize: card.hasAttribute("data-size")
+    };
+    products.push(p);
+
+    var qty = 1;
+    var out = card.querySelector("output");
+    var minus = card.querySelector('[data-act="minus"]');
+    var plus = card.querySelector('[data-act="plus"]');
+    var total = card.querySelector(".total");
+    var a = card.querySelector(".order-link");
+    var size = card.querySelector(".size");
+
+    function render() {
+      out.textContent = bn(qty);
+      minus.disabled = qty <= 1;
+      plus.disabled = qty >= p.max;
+      var t = qty * p.price;
+      total.textContent = bn(t);
+      a.href = link(orderMsg({
+        name: p.name, qty: qty, unit: p.unit, total: t,
+        size: size ? size.value : ""
+      }));
+    }
+    minus.addEventListener("click", function () { if (qty > 1) { qty--; render(); } });
+    plus.addEventListener("click", function () { if (qty < p.max) { qty++; render(); } });
+    if (size) size.addEventListener("change", render);
+    render();
+  });
+
+  /* Order form */
+  var sel = document.getElementById("f-product");
+  var qtyIn = document.getElementById("f-qty");
+  var sizeWrap = document.getElementById("f-size-wrap");
+  var sizeSel = document.getElementById("f-size");
+  var nameIn = document.getElementById("f-name");
+  var phoneIn = document.getElementById("f-phone");
+  var addrIn = document.getElementById("f-address");
+  var noteIn = document.getElementById("f-note");
+  var lineEl = document.getElementById("f-line");
+  var totalEl = document.getElementById("f-total");
+  var send = document.getElementById("f-send");
+
+  products.forEach(function (p) {
+    var o = document.createElement("option");
+    o.value = String(p.id);
+    o.textContent = p.name;
+    sel.appendChild(o);
+  });
+
+  function formRender() {
+    var p = products[Number(sel.value)];
+    var q = parseInt(qtyIn.value, 10);
+    if (!q || q < 1) q = 1;
+    if (q > p.max) q = p.max;
+    qtyIn.max = String(p.max);
+    sizeWrap.hidden = !p.hasSize;
+    var total = q * p.price;
+    lineEl.textContent = p.name + " × " + bn(q) + " " + p.unit;
+    totalEl.textContent = bn(total);
+    send.href = link(orderMsg({
+      name: p.name, qty: q, unit: p.unit, total: total,
+      size: p.hasSize ? sizeSel.value : "",
+      customer: {
+        name: nameIn.value.trim(), phone: phoneIn.value.trim(),
+        address: addrIn.value.trim(), note: noteIn.value.trim()
+      }
+    }));
+  }
+  [sel, qtyIn, sizeSel, nameIn, phoneIn, addrIn, noteIn].forEach(function (el) {
+    el.addEventListener("input", formRender);
+    el.addEventListener("change", formRender);
+  });
+  document.getElementById("order-form").addEventListener("submit", function (e) { e.preventDefault(); });
+  formRender();
+})();
+</script>
+
+</body>
+</html>
