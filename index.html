@@ -673,7 +673,73 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
       </div>
       <div class="row two">
         <label for="f-district">জেলা
-          <input id="f-district" type="text" placeholder="জেলার নাম">
+          <select id="f-district">
+            <option value="" selected>জেলা সিলেক্ট করুন</option>
+              <option>ঢাকা</option>
+              <option>গাজীপুর</option>
+              <option>নারায়ণগঞ্জ</option>
+              <option>টাঙ্গাইল</option>
+              <option>নরসিংদী</option>
+              <option>মুন্সীগঞ্জ</option>
+              <option>মানিকগঞ্জ</option>
+              <option>ময়মনসিংহ</option>
+              <option>শেরপুর</option>
+              <option>জামালপুর</option>
+              <option>নেত্রকোণা</option>
+              <option>কিশোরগঞ্জ</option>
+              <option>চট্টগ্রাম</option>
+              <option>কক্সবাজার</option>
+              <option>রাঙ্গামাটি</option>
+              <option>খাগড়াছড়ি</option>
+              <option>বান্দরবান</option>
+              <option>কুমিল্লা</option>
+              <option>চাঁদপুর</option>
+              <option>ব্রাহ্মণবাড়িয়া</option>
+              <option>নোয়াখালী</option>
+              <option>ফেনী</option>
+              <option>লক্ষ্মীপুর</option>
+              <option>খুলনা</option>
+              <option>যশোর</option>
+              <option>সাতক্ষীরা</option>
+              <option>বাগেরহাট</option>
+              <option>কুষ্টিয়া</option>
+              <option>চুয়াডাঙ্গা</option>
+              <option>মেহেরপুর</option>
+              <option>ঝিনাইদহ</option>
+              <option>মাগুরা</option>
+              <option>নড়াইল</option>
+              <option>রাজশাহী</option>
+              <option>পাবনা</option>
+              <option>সিরাজগঞ্জ</option>
+              <option>বগুড়া</option>
+              <option>নাটোর</option>
+              <option>নওগাঁ</option>
+              <option>চাঁপাইনবাবগঞ্জ</option>
+              <option>জয়পুরহাট</option>
+              <option>রংপুর</option>
+              <option>দিনাজপুর</option>
+              <option>ঠাকুরগাঁও</option>
+              <option>পঞ্চগড়</option>
+              <option>নীলফামারী</option>
+              <option>লালমনিরহাট</option>
+              <option>কুড়িগ্রাম</option>
+              <option>গাইবান্ধা</option>
+              <option>বরিশাল</option>
+              <option>পটুয়াখালী</option>
+              <option>বরগুনা</option>
+              <option>ভোলা</option>
+              <option>পিরোজপুর</option>
+              <option>ঝালকাঠি</option>
+              <option>সিলেট</option>
+              <option>হবিগঞ্জ</option>
+              <option>মৌলভীবাজার</option>
+              <option>সুনামগঞ্জ</option>
+              <option>ফরিদপুর</option>
+              <option>রাজবাড়ী</option>
+              <option>গোপালগঞ্জ</option>
+              <option>মাদারীপুর</option>
+              <option>শরীয়তপুর</option>
+          </select>
         </label>
       </div>
       <div class="row two">
@@ -695,6 +761,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
       </label>
       <div class="summary">
         <span id="f-line">পণ্য</span>
+        <span id="f-fee-wrap" hidden>ডেলিভারি ফি: <b id="f-fee">০</b> টাকা</span>
         <span>সর্বমোট: <b id="f-total">০</b> টাকা</span>
       </div>
       <a class="btn btn-order" id="f-send" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার পাঠান</a>
@@ -735,6 +802,10 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
     lines.push("পরিমাণ: " + bn(o.qty) + " " + o.unit);
     if (o.size) lines.push("সাইজ: " + o.size);
     lines.push("মোট দাম: " + bn(o.total) + " টাকা");
+    if (o.delivery) {
+      lines.push("ডেলিভারি ফি: " + bn(o.delivery) + " টাকা");
+      lines.push("সর্বমোট: " + bn(o.total + o.delivery) + " টাকা");
+    }
     if (o.payment) lines.push("পেমেন্ট মাধ্যম: " + o.payment + " (নম্বর: ০১৪০৭-৬৮৮৮৩০)");
     if (o.customer) {
       lines.push("");
@@ -804,6 +875,8 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
   var paySel = document.getElementById("f-pay");
   var payName = document.getElementById("f-pay-name");
   var payNum = document.getElementById("f-pay-num");
+  var feeWrap = document.getElementById("f-fee-wrap");
+  var feeEl = document.getElementById("f-fee");
   var lineEl = document.getElementById("f-line");
   var totalEl = document.getElementById("f-total");
   var send = document.getElementById("f-send");
@@ -823,12 +896,16 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
     qtyIn.max = String(p.max);
     sizeWrap.hidden = !p.hasSize;
     var total = q * p.price;
+    var district = districtIn.value;
+    var delivery = district ? (district === "ঢাকা" ? 100 : 150) : 0;
     lineEl.textContent = p.name + " × " + bn(q) + " " + p.unit;
-    totalEl.textContent = bn(total);
+    feeWrap.hidden = !delivery;
+    if (delivery) feeEl.textContent = bn(delivery);
+    totalEl.textContent = bn(total + delivery);
     payName.textContent = paySel.value;
     payNum.textContent = "০১৪০৭-৬৮৮৮৩০";
     send.href = link(orderMsg({
-      name: p.name, qty: q, unit: p.unit, total: total,
+      name: p.name, qty: q, unit: p.unit, total: total, delivery: delivery,
       size: p.hasSize ? sizeSel.value : "",
       payment: paySel.value,
       customer: {
