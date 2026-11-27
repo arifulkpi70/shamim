@@ -211,6 +211,13 @@ textarea { resize: vertical; min-height: 5.5rem; }
 }
 .summary b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; }
 .hint { color: var(--muted); font-size: .95rem; margin: 0; }
+.pay-box {
+  background: linear-gradient(120deg, rgba(14, 138, 85, .12), rgba(14, 138, 85, .05));
+  border: 2px solid var(--green); border-radius: 14px;
+  padding: .9rem 1.1rem; display: grid; gap: .15rem; font-weight: 600;
+}
+.pay-box .pay-num { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1.2; color: var(--green); }
+.pay-box .pay-note { color: var(--muted); font-size: .95rem; font-weight: 500; }
 
 footer { background: linear-gradient(180deg, #262040, var(--ink) 60%); color: var(--bg); padding-block: 2rem; margin-top: 1rem; box-shadow: inset 0 12px 24px rgba(0, 0, 0, .25); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
@@ -669,6 +676,20 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
           <input id="f-district" type="text" placeholder="জেলার নাম">
         </label>
       </div>
+      <div class="row two">
+        <label for="f-pay">পেমেন্ট মাধ্যম
+          <select id="f-pay">
+            <option selected>বিকাশ</option>
+            <option>রকেট</option>
+            <option>নগদ</option>
+          </select>
+        </label>
+      </div>
+      <div class="pay-box" id="f-pay-box" aria-live="polite">
+        <span>পেমেন্ট মাধ্যম: <b id="f-pay-name">বিকাশ</b></span>
+        <span>পেমেন্ট নম্বর: <span class="pay-num" id="f-pay-num">০১৪০৭-৬৮৮৮৩০</span></span>
+        <span class="pay-note">অর্ডারের পেমেন্ট এই নম্বরে পাঠান।</span>
+      </div>
       <label for="f-note">অতিরিক্ত কিছু বলতে চাইলে
         <input id="f-note" type="text" placeholder="যেমন: সন্ধ্যার পর আসবেন">
       </label>
@@ -714,6 +735,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
     lines.push("পরিমাণ: " + bn(o.qty) + " " + o.unit);
     if (o.size) lines.push("সাইজ: " + o.size);
     lines.push("মোট দাম: " + bn(o.total) + " টাকা");
+    if (o.payment) lines.push("পেমেন্ট মাধ্যম: " + o.payment + " (নম্বর: ০১৪০৭-৬৮৮৮৩০)");
     if (o.customer) {
       lines.push("");
       if (o.customer.name) lines.push("নাম: " + o.customer.name);
@@ -779,6 +801,9 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
   var upazilaIn = document.getElementById("f-upazila");
   var districtIn = document.getElementById("f-district");
   var noteIn = document.getElementById("f-note");
+  var paySel = document.getElementById("f-pay");
+  var payName = document.getElementById("f-pay-name");
+  var payNum = document.getElementById("f-pay-num");
   var lineEl = document.getElementById("f-line");
   var totalEl = document.getElementById("f-total");
   var send = document.getElementById("f-send");
@@ -800,9 +825,12 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
     var total = q * p.price;
     lineEl.textContent = p.name + " × " + bn(q) + " " + p.unit;
     totalEl.textContent = bn(total);
+    payName.textContent = paySel.value;
+    payNum.textContent = "০১৪০৭-৬৮৮৮৩০";
     send.href = link(orderMsg({
       name: p.name, qty: q, unit: p.unit, total: total,
       size: p.hasSize ? sizeSel.value : "",
+      payment: paySel.value,
       customer: {
         name: nameIn.value.trim(), phone: phoneIn.value.trim(),
         address: [
@@ -816,7 +844,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
       }
     }));
   }
-  [sel, qtyIn, sizeSel, nameIn, phoneIn, houseIn, areaIn, villageIn, upazilaIn, districtIn, noteIn].forEach(function (el) {
+  [sel, qtyIn, sizeSel, nameIn, phoneIn, houseIn, areaIn, villageIn, upazilaIn, districtIn, noteIn, paySel].forEach(function (el) {
     el.addEventListener("input", formRender);
     el.addEventListener("change", formRender);
   });
