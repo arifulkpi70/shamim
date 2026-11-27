@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: bazaar signboard. Loud red hero with a big painted title, then paper-white product cards with hard offset shadows, then a plain order form. */
+/* Layout: warm, realistic storefront. Rich gradient red hero with a big painted title, then paper-white product cards with soft layered shadows and detailed shaded illustrations, then a plain order form. */
 :root {
   color-scheme: light;
   --bg: #FFF4C2;
@@ -20,25 +20,31 @@
   --green: #0E8A55;
   --on-green: #FFFFFF;
   --field: #FFFBE8;
-  --shadow: #1C1A2E;
+  --shadow: rgba(28, 26, 46, .16);
+  --shadow-strong: rgba(28, 26, 46, .30);
   --font-display: "Baloo Da 2", "Hind Siliguri", "Noto Sans Bengali", sans-serif;
   --font-body: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #16131F; --paper: #221E30; --ink: #FFF4C2; --muted: #B9B3CC;
-    --field: #1A1726; --shadow: #000000; color-scheme: dark;
+    --field: #1A1726; --shadow: rgba(0, 0, 0, .55); --shadow-strong: rgba(0, 0, 0, .75); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #16131F; --paper: #221E30; --ink: #FFF4C2; --muted: #B9B3CC;
-  --field: #1A1726; --shadow: #000000; color-scheme: dark;
+  --field: #1A1726; --shadow: rgba(0, 0, 0, .55); --shadow-strong: rgba(0, 0, 0, .75); color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 body {
   margin: 0;
   background: var(--bg);
+  background-image:
+    radial-gradient(1100px 520px at 88% -5%, rgba(255, 201, 20, .38), transparent 60%),
+    radial-gradient(900px 620px at -12% 32%, rgba(200, 30, 52, .09), transparent 55%),
+    radial-gradient(1000px 700px at 110% 78%, rgba(14, 138, 85, .08), transparent 55%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 17px;
@@ -55,17 +61,22 @@ a { color: inherit; }
 
 /* Hero */
 .hero {
-  background: var(--hero);
+  background:
+    radial-gradient(760px 320px at 86% -10%, rgba(255, 201, 20, .42), transparent 62%),
+    radial-gradient(600px 420px at -8% 115%, rgba(0, 0, 0, .22), transparent 60%),
+    linear-gradient(135deg, #E83A54 0%, var(--hero) 48%, #8E1122 100%);
   color: #fff;
   margin-top: calc(-1 * env(safe-area-inset-top, 0px));
   padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
   padding-bottom: 3rem;
   border-bottom: 4px solid var(--ink);
+  box-shadow: inset 0 -22px 34px rgba(0, 0, 0, .14), 0 10px 28px rgba(142, 17, 34, .25);
 }
 .hero .wrap { display: grid; gap: 1.1rem; justify-items: start; }
 .kicker {
-  font-weight: 600; letter-spacing: .02em; background: #fff; color: #1C1A2E;
+  font-weight: 600; letter-spacing: .02em; background: linear-gradient(180deg, #FFFFFF, #FFEFC4); color: #1C1A2E;
   padding: .15rem .8rem; border-radius: 99px; font-size: .95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 }
 .hero h1 {
   font-family: var(--font-display);
@@ -74,7 +85,7 @@ a { color: inherit; }
   line-height: 1.05;
   margin: 0;
   color: var(--yellow);
-  text-shadow: 4px 4px 0 #1C1A2E;
+  text-shadow: 3px 3px 0 rgba(28, 26, 46, .92), 0 16px 36px rgba(0, 0, 0, .38);
   text-wrap: balance;
 }
 .hero p.lead { margin: 0; font-size: clamp(1.1rem, 3.4vw, 1.5rem); max-width: 34ch; font-weight: 500; }
@@ -86,16 +97,16 @@ a { color: inherit; }
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
   font: inherit; font-weight: 700; font-size: 1.05rem;
   padding: .7rem 1.3rem;
-  border: 3px solid #1C1A2E; border-radius: 10px;
+  border: 2px solid rgba(28, 26, 46, .88); border-radius: 12px;
   text-decoration: none; cursor: pointer;
-  box-shadow: 4px 4px 0 #1C1A2E;
-  transition: transform .12s, box-shadow .12s;
+  box-shadow: 0 6px 16px rgba(28, 26, 46, .26), inset 0 1px 0 rgba(255, 255, 255, .35);
+  transition: transform .15s, box-shadow .15s;
 }
-.btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1C1A2E; }
-.btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #1C1A2E; }
-.btn-order { background: var(--green); color: var(--on-green); width: 100%; }
-.btn-yellow { background: var(--yellow); color: #1C1A2E; }
-.btn-white { background: #fff; color: #1C1A2E; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(28, 26, 46, .30), inset 0 1px 0 rgba(255, 255, 255, .35); }
+.btn:active { transform: translateY(1px); box-shadow: 0 3px 8px rgba(28, 26, 46, .25); }
+.btn-order { background: linear-gradient(180deg, #13A76B, var(--green) 55%, #0B7247); color: var(--on-green); width: 100%; }
+.btn-yellow { background: linear-gradient(180deg, #FFDA3D, var(--yellow) 60%, #F5B800); color: #1C1A2E; }
+.btn-white { background: linear-gradient(180deg, #FFFFFF, #F1EAD2); color: #1C1A2E; }
 
 /* Sections */
 section { padding-block: 3rem; }
@@ -110,21 +121,27 @@ h2 {
 .grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
 .card {
-  background: var(--paper);
-  border: 3px solid var(--ink);
-  border-radius: 14px;
-  box-shadow: 6px 6px 0 var(--shadow);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper) 78%, rgba(255, 201, 20, .07) 100%);
+  border: 2px solid rgba(28, 26, 46, .82);
+  border-radius: 20px;
+  box-shadow: 0 14px 30px var(--shadow), 0 3px 8px var(--shadow);
   display: flex; flex-direction: column;
   min-width: 0; overflow: hidden;
+  transition: transform .18s, box-shadow .18s;
 }
-.tile { position: relative; border-bottom: 3px solid var(--ink); }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 42px var(--shadow-strong), 0 6px 14px var(--shadow);
+}
+.tile { position: relative; border-bottom: 2px solid rgba(28, 26, 46, .82); }
 .tile svg { display: block; width: 100%; height: auto; }
 .badge {
   position: absolute; top: 12px; right: 12px;
-  background: var(--yellow); color: #1C1A2E;
-  border: 2px solid #1C1A2E; border-radius: 99px;
+  background: linear-gradient(180deg, #FFDA3D, var(--yellow)); color: #1C1A2E;
+  border: 1.5px solid rgba(28, 26, 46, .85); border-radius: 99px;
   padding: .05rem .75rem; font-weight: 700; font-size: .9rem;
   transform: rotate(4deg);
+  box-shadow: 0 4px 10px rgba(28, 26, 46, .30);
 }
 .card-body { padding: 1.2rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: .8rem; flex: 1; }
 .card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; line-height: 1.25; margin: 0; }
@@ -136,7 +153,7 @@ h2 {
 .price { font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1; }
 .price small { font-family: var(--font-body); font-weight: 500; font-size: .95rem; color: var(--muted); }
 .controls { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
-.qty { display: inline-flex; align-items: center; border: 3px solid var(--ink); border-radius: 10px; overflow: hidden; background: var(--field); }
+.qty { display: inline-flex; align-items: center; border: 2px solid rgba(28, 26, 46, .82); border-radius: 12px; overflow: hidden; background: var(--field); box-shadow: inset 0 2px 5px rgba(28, 26, 46, .10); }
 .qty button {
   font: inherit; font-weight: 700; font-size: 1.3rem; width: 2.6rem; height: 2.6rem;
   border: 0; background: transparent; color: var(--ink); cursor: pointer;
@@ -151,8 +168,15 @@ h2 {
 label { display: grid; gap: .3rem; font-weight: 600; }
 input, select, textarea {
   font: inherit; color: var(--ink); background: var(--field);
-  border: 3px solid var(--ink); border-radius: 10px; padding: .6rem .8rem;
+  border: 2px solid rgba(28, 26, 46, .75); border-radius: 12px; padding: .6rem .8rem;
   width: 100%; min-width: 0;
+  box-shadow: inset 0 2px 5px rgba(28, 26, 46, .08);
+  transition: box-shadow .15s, border-color .15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--hero);
+  box-shadow: 0 0 0 4px rgba(255, 201, 20, .45), inset 0 2px 5px rgba(28, 26, 46, .08);
+  outline: none;
 }
 textarea { resize: vertical; min-height: 5.5rem; }
 .size-pick { display: grid; gap: .3rem; font-weight: 600; font-size: .95rem; }
@@ -163,7 +187,8 @@ textarea { resize: vertical; min-height: 5.5rem; }
 .steps { display: grid; gap: 18px; grid-template-columns: 1fr; list-style: none; margin: 0; padding: 0; counter-reset: s; }
 @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
 .steps li {
-  counter-increment: s; background: var(--paper); border: 3px solid var(--ink); border-radius: 14px;
+  counter-increment: s; background: var(--paper); border: 2px solid rgba(28, 26, 46, .82); border-radius: 18px;
+  box-shadow: 0 10px 22px var(--shadow);
   padding: 1.1rem 1.2rem; display: grid; gap: .3rem; min-width: 0;
 }
 .steps li::before {
@@ -174,25 +199,26 @@ textarea { resize: vertical; min-height: 5.5rem; }
 
 /* Order form */
 .order-box {
-  background: var(--paper); border: 3px solid var(--ink); border-radius: 14px;
-  box-shadow: 6px 6px 0 var(--shadow); padding: 1.4rem; display: grid; gap: 1.1rem;
+  background: var(--paper); border: 2px solid rgba(28, 26, 46, .82); border-radius: 20px;
+  box-shadow: 0 16px 34px var(--shadow), 0 4px 10px var(--shadow); padding: 1.4rem; display: grid; gap: 1.1rem;
 }
 .row { display: grid; gap: 1.1rem; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .row.two { grid-template-columns: 1fr 1fr; } }
 .summary {
-  background: var(--yellow); color: #1C1A2E; border: 3px solid #1C1A2E; border-radius: 10px;
+  background: linear-gradient(120deg, #FFDA3D, var(--yellow) 55%, #FFB700); color: #1C1A2E; border: 2px solid rgba(28, 26, 46, .85); border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(28, 26, 46, .18), inset 0 1px 0 rgba(255, 255, 255, .5);
   padding: .9rem 1.1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-weight: 600;
 }
 .summary b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; }
 .hint { color: var(--muted); font-size: .95rem; margin: 0; }
 
-footer { background: var(--ink); color: var(--bg); padding-block: 2rem; margin-top: 1rem; }
+footer { background: linear-gradient(180deg, #262040, var(--ink) 60%); color: var(--bg); padding-block: 2rem; margin-top: 1rem; box-shadow: inset 0 12px 24px rgba(0, 0, 0, .25); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
 footer b { font-family: var(--font-display); font-size: 1.4rem; }
 
 @counter-style bengali { system: numeric; symbols: "০" "১" "২" "৩" "৪" "৫" "৬" "৭" "৮" "৯"; }
 
-@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .btn, .card, input, select, textarea { transition: none; } .card:hover, .btn:hover { transform: none; } }
 </style>
 </head>
 <body>
@@ -219,7 +245,172 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
 
     <div class="grid">
 
-      <!-- 1 -->
+      <!-- 1 (new) -->
+      <article class="card" data-name="শামিমের স্পেশাল মায়ার মিল্কশেক" data-unit="টি" data-price="500" data-max="20">
+        <div class="tile">
+          <span class="badge">নতুন</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="হুইপড ক্রিম, চেরি আর স্ট্র দেওয়া গ্লাসভরা মিল্কশেক">
+            <defs>
+              <linearGradient id="msBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFE7F1"/><stop offset="1" stop-color="#FFBED6"/>
+              </linearGradient>
+              <linearGradient id="msBody" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFA8C5"/><stop offset=".55" stop-color="#F77CA6"/><stop offset="1" stop-color="#E7548C"/>
+              </linearGradient>
+              <linearGradient id="msChoc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8A4A22"/><stop offset="1" stop-color="#552A10"/>
+              </linearGradient>
+              <linearGradient id="msCream" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F3DCE7"/>
+              </linearGradient>
+              <linearGradient id="msGlass" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#FFFFFF" stop-opacity=".50"/><stop offset=".45" stop-color="#FFFFFF" stop-opacity=".07"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".32"/>
+              </linearGradient>
+              <radialGradient id="msCherry" cx="35%" cy="30%" r="80%">
+                <stop offset="0" stop-color="#FF8A9A"/><stop offset=".5" stop-color="#E02343"/><stop offset="1" stop-color="#9E0F27"/>
+              </radialGradient>
+              <clipPath id="msClip"><path d="M84 62 L156 62 L149 156 Q148 166 139 166 L101 166 Q92 166 91 156Z"/></clipPath>
+            </defs>
+            <rect width="240" height="180" fill="url(#msBg)"/>
+            <circle cx="34" cy="34" r="16" fill="#fff" opacity=".35"/>
+            <circle cx="208" cy="52" r="11" fill="#fff" opacity=".30"/>
+            <circle cx="196" cy="128" r="7" fill="#fff" opacity=".30"/>
+            <ellipse cx="120" cy="169" rx="64" ry="7" fill="#B84A6E" opacity=".28"/>
+            <g transform="rotate(16 152 34)">
+              <rect x="145" y="2" width="14" height="72" rx="7" fill="#E02343"/>
+              <rect x="149.5" y="2" width="4.5" height="72" fill="#fff" opacity=".9"/>
+            </g>
+            <g clip-path="url(#msClip)">
+              <rect x="80" y="58" width="80" height="112" fill="url(#msBody)"/>
+              <path d="M80 102 Q100 94 120 102 T160 102 L160 118 Q140 110 120 118 T80 118Z" fill="#FFD3E2" opacity=".8"/>
+              <path d="M80 136 Q100 128 120 136 T160 136 L160 172 L80 172Z" fill="url(#msChoc)"/>
+              <rect x="80" y="58" width="80" height="112" fill="url(#msGlass)"/>
+            </g>
+            <path d="M84 62 L156 62 L149 156 Q148 166 139 166 L101 166 Q92 166 91 156Z" fill="none" stroke="#8E4A5E" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="95" y="72" width="9" height="78" rx="4.5" fill="#fff" opacity=".55"/>
+            <g fill="#fff" opacity=".65">
+              <ellipse cx="140" cy="86" rx="3" ry="5"/><ellipse cx="146" cy="112" rx="2.4" ry="4"/><ellipse cx="102" cy="122" rx="2.4" ry="4"/>
+            </g>
+            <ellipse cx="120" cy="61" rx="41" ry="13" fill="url(#msCream)"/>
+            <ellipse cx="120" cy="49" rx="29" ry="11" fill="url(#msCream)"/>
+            <ellipse cx="120" cy="38" rx="17" ry="8" fill="url(#msCream)"/>
+            <path d="M92 58 Q120 68 148 58" fill="none" stroke="#E9B9CC" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M99 46 Q120 54 141 46" fill="none" stroke="#E9B9CC" stroke-width="2.5" stroke-linecap="round"/>
+            <g>
+              <rect x="103" y="52" width="9" height="3" rx="1.5" fill="#E02343" transform="rotate(24 107 53)"/>
+              <rect x="128" y="55" width="9" height="3" rx="1.5" fill="#0E8A55" transform="rotate(-18 132 56)"/>
+              <rect x="115" y="42" width="9" height="3" rx="1.5" fill="#FFC914" transform="rotate(40 119 43)"/>
+              <rect x="136" y="45" width="9" height="3" rx="1.5" fill="#3E7CB1" transform="rotate(-32 140 46)"/>
+            </g>
+            <path d="M121 24 Q127 11 138 8" fill="none" stroke="#4A7C2F" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="120" cy="29" r="9.5" fill="url(#msCherry)"/>
+            <ellipse cx="116.5" cy="25.5" rx="3" ry="2" fill="#fff" opacity=".75" transform="rotate(-25 116 25)"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>শামিমের স্পেশাল মায়ার মিল্কশেক</h3>
+          <p>ঘন দুধ, প্রিমিয়াম আইসক্রিম আর গোপন রেসিপির মিশেলে তৈরি ঠান্ডা, ক্রিমি মিল্কশেক। ওপরে হুইপড ক্রিম আর লাল চেরি — এক চুমুকেই বুঝবেন, কেন এটা শামিমের স্পেশাল।</p>
+          <ul class="specs">
+            <li>তাজা দুধ ও প্রিমিয়াম আইসক্রিম</li>
+            <li>ওপরে হুইপড ক্রিম ও চেরি</li>
+            <li>অর্ডারের পরপরই তাজা বানানো হয়</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">৫০০ টাকা <small>প্রতি টি</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="পরিমাণ">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <span class="total-line">মোট: <b class="total">৫০০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+      <!-- 2 (new) -->
+      <article class="card" data-name="শামিমের EX স্পেশাল কেক" data-unit="পাউন্ড" data-price="250" data-max="50">
+        <div class="tile">
+          <span class="badge">স্পেশাল</span>
+          <svg viewBox="0 0 240 180" role="img" aria-label="ফ্রস্টিং আর চেরি দেওয়া স্তরে সাজানো স্পেশাল কেক">
+            <defs>
+              <linearGradient id="ckBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFF3DA"/><stop offset="1" stop-color="#FFDFAC"/>
+              </linearGradient>
+              <linearGradient id="ckFrost" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFB3CD"/><stop offset="1" stop-color="#F26D9D"/>
+              </linearGradient>
+              <linearGradient id="ckSponge" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#F9DC9A"/><stop offset="1" stop-color="#E8A94F"/>
+              </linearGradient>
+              <linearGradient id="ckChoc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8A4A22"/><stop offset="1" stop-color="#4E2712"/>
+              </linearGradient>
+              <linearGradient id="ckPlate" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#F7FAFC"/><stop offset="1" stop-color="#B9C4CE"/>
+              </linearGradient>
+              <radialGradient id="ckCherry" cx="35%" cy="30%" r="80%">
+                <stop offset="0" stop-color="#FF8A9A"/><stop offset=".5" stop-color="#E02343"/><stop offset="1" stop-color="#9E0F27"/>
+              </radialGradient>
+            </defs>
+            <rect width="240" height="180" fill="url(#ckBg)"/>
+            <circle cx="30" cy="128" r="10" fill="#fff" opacity=".35"/>
+            <circle cx="212" cy="34" r="13" fill="#fff" opacity=".32"/>
+            <ellipse cx="120" cy="160" rx="88" ry="10" fill="#C07F3A" opacity=".25"/>
+            <ellipse cx="120" cy="152" rx="86" ry="12" fill="url(#ckPlate)" stroke="#7C8A96" stroke-width="2"/>
+            <ellipse cx="120" cy="149" rx="64" ry="8" fill="#E7EDF1"/>
+            <rect x="44" y="114" width="152" height="34" rx="8" fill="url(#ckChoc)"/>
+            <rect x="44" y="114" width="152" height="7" rx="3.5" fill="#A8642F" opacity=".8"/>
+            <rect x="54" y="86" width="132" height="30" rx="8" fill="url(#ckSponge)"/>
+            <rect x="54" y="86" width="132" height="6" rx="3" fill="#FBE3B0" opacity=".9"/>
+            <rect x="64" y="58" width="112" height="30" rx="8" fill="#FFF1DC"/>
+            <path d="M64 66 Q64 54 76 54 L164 54 Q176 54 176 66 L176 71 Q169 80 162 71 Q156 81 148 72 Q141 80 133 72 Q126 81 119 72 Q112 80 105 72 Q98 81 91 71 Q84 80 78 71 Q70 79 64 71Z" fill="url(#ckFrost)"/>
+            <path d="M170 92 L170 142 Q170 148 164 148 L186 148 Q176 148 176 140 L176 92Z" fill="#000" opacity=".10"/>
+            <path d="M64 62 L64 82 Q64 88 70 88 L64 88 Q58 88 58 82 L58 62Z" fill="#000" opacity=".06"/>
+            <g>
+              <rect x="82" y="63" width="9" height="3" rx="1.5" fill="#fff" transform="rotate(20 86 64)"/>
+              <rect x="118" y="60" width="9" height="3" rx="1.5" fill="#FFC914" transform="rotate(-24 122 61)"/>
+              <rect x="148" y="64" width="9" height="3" rx="1.5" fill="#0E8A55" transform="rotate(30 152 65)"/>
+            </g>
+            <path d="M89 42 Q94 31 103 29" fill="none" stroke="#4A7C2F" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M121 40 Q126 29 135 27" fill="none" stroke="#4A7C2F" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M153 42 Q158 31 167 29" fill="none" stroke="#4A7C2F" stroke-width="2.6" stroke-linecap="round"/>
+            <circle cx="88" cy="46" r="8.5" fill="url(#ckCherry)"/>
+            <circle cx="120" cy="44" r="8.5" fill="url(#ckCherry)"/>
+            <circle cx="152" cy="46" r="8.5" fill="url(#ckCherry)"/>
+            <g fill="#fff" opacity=".75">
+              <ellipse cx="85" cy="43" rx="2.6" ry="1.8" transform="rotate(-25 85 43)"/>
+              <ellipse cx="117" cy="41" rx="2.6" ry="1.8" transform="rotate(-25 117 41)"/>
+              <ellipse cx="149" cy="43" rx="2.6" ry="1.8" transform="rotate(-25 149 43)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>শামিমের EX স্পেশাল কেক</h3>
+          <p>নরম স্পঞ্জ, ঘন ক্রিম আর চকলেটের স্তরে স্তরে সাজানো স্পেশাল কেক। জন্মদিন হোক বা যেকোনো আয়োজন — অর্ডার পেলেই তাজা বানিয়ে দেওয়া হয়।</p>
+          <ul class="specs">
+            <li>প্রতি পাউন্ড মাত্র ২৫০ টাকা</li>
+            <li>কমপক্ষে ১ দিন আগে অর্ডার করুন</li>
+            <li>ভ্যানিলা, চকলেট ও স্ট্রবেরি ফ্লেভার</li>
+          </ul>
+          <div class="price-row">
+            <div class="price">২৫০ টাকা <small>প্রতি পাউন্ড</small></div>
+          </div>
+          <div class="controls">
+            <div class="qty" aria-label="পরিমাণ">
+              <button type="button" data-act="minus" aria-label="কমান">−</button>
+              <output>১</output>
+              <button type="button" data-act="plus" aria-label="বাড়ান">+</button>
+            </div>
+            <span class="total-line">মোট: <b class="total">২৫০</b> টাকা</span>
+          </div>
+          <a class="btn btn-order order-link" href="https://wa.me/8801407688830" target="_blank" rel="noopener">হোয়াটসঅ্যাপে অর্ডার করুন</a>
+        </div>
+      </article>
+
+      <!-- 3 -->
       <article class="card" data-name="শামিমের বিচি জোড়া" data-unit="জোড়া" data-price="7200000" data-max="1">
         <div class="tile" style="background:#3B2A6B">
           <span class="badge">সীমিত স্টক</span>
@@ -266,7 +457,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
         </div>
       </article>
 
-      <!-- 2 -->
+      <!-- 4 -->
       <article class="card" data-name="শামিমের অক্সফোর্ড জুতা" data-unit="জোড়া" data-price="690" data-max="10" data-size="1">
         <div class="tile" style="background:#BFE3F2">
           <span class="badge">সেরা বিক্রি</span>
@@ -314,7 +505,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
         </div>
       </article>
 
-      <!-- 3 -->
+      <!-- 5 -->
       <article class="card" data-name="টয়লেট পরিষ্কার সার্ভিস" data-unit="টি টয়লেট" data-price="100" data-max="20">
         <div class="tile" style="background:#CDEFD9">
           <span class="badge">ঝকঝকে</span>
@@ -360,7 +551,7 @@ footer b { font-family: var(--font-display); font-size: 1.4rem; }
         </div>
       </article>
 
-      <!-- 4 -->
+      <!-- 6 -->
       <article class="card" data-name="এক ঘণ্টা কামলা" data-unit="ঘণ্টা" data-price="50" data-max="12">
         <div class="tile" style="background:#FFD9B0">
           <span class="badge">সস্তা</span>
